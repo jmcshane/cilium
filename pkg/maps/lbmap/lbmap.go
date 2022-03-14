@@ -299,8 +299,12 @@ func (*LBBPFMap) DeleteBackendByID(id loadbalancer.BackendID) error {
 
 	// The backend could be a backend for a NAT64 service, therefore
 	// attempt to remove from both backend maps.
-	deleteBackendByIDFamily(id, true)
-	deleteBackendByIDFamily(id, false)
+	if option.Config.EnableIPv6 {
+		deleteBackendByIDFamily(id, true)
+	}
+	if option.Config.EnableIPv4 {
+		deleteBackendByIDFamily(id, false)
+	}
 	return nil
 }
 
